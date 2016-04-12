@@ -8,6 +8,9 @@ package jenalearning;
 import org.apache.jena.atlas.logging.LogCtl;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.DC_10;
+import org.apache.jena.vocabulary.VCARD;
 
 
 /**
@@ -16,6 +19,14 @@ import org.apache.jena.rdf.model.ModelFactory;
  */
 public class JenaLearning {
 
+    static String bookURI = "http://si.com/hojarasca";
+    static String AuthorURI = "http://si.com/Marquez";
+    static String bookTitle = "La Hojarasca";
+    static String AuthorName = "Gabriel";
+    static String AuthorSurname = "Garcia Marquez";
+    static String AuthorFullname = AuthorName + " " + AuthorSurname;
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -23,7 +34,20 @@ public class JenaLearning {
         
         LogCtl.setCmdLogging(); //avoid loging warnings
         
-        Model modelo = ModelFactory.createDefaultModel();
+        Model model = ModelFactory.createDefaultModel();
+        
+        Resource bookRSC = model.createResource(bookURI);
+        bookRSC.addProperty(DC_10.title, bookTitle);
+        
+        Resource authorRSC = model.createResource(AuthorURI);
+        authorRSC.addProperty(VCARD.NAME, AuthorFullname);
+        authorRSC.addProperty(VCARD.Family, AuthorSurname);
+        authorRSC.addProperty(VCARD.Given, AuthorName);
+        
+        
+        bookRSC.addProperty(DC_10.creator, authorRSC);
+        
+        model.write(System.out); //printed in console formated as XML/RDF
         
     }
     
